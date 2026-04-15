@@ -154,3 +154,23 @@ char checkWinner(int playerHp, int enemyHp) {
 		return 'c';
 	}
 }
+
+const char* useItem(char* playerInventory[], int index, int* playerHp, int* playerAp) {
+
+	if (index == 1) {
+		*playerHp += 25;
+		return playerInventory[index - 1];
+	}
+	else if (index == 2) {
+		if (*playerAp == 20) {
+			printf("You already have an attack boost active!");
+			return playerInventory[index - 1];
+		}
+		*playerAp *= 2;
+		return playerInventory[index - 1];
+	}
+	else {
+		return NULL;
+	}
+
+};
