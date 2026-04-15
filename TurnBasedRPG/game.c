@@ -6,7 +6,7 @@
 
 int attack(int playerAp, int* enemyHp, bool crit);
 int block(int* playerHp, int enemyAp, bool dodge);
-const char* useItem(char* playerInventory[], int index, int* playerHp, int* playerAp);	
+const char* useItem(char* playerInventory[], int index, int* playerHp, int* playerAp, int *healCount, int *attackBoostCount);	
 char checkWinner(int playerHp, int enemyHp);
 void displayIntro();
 void showStats(int playerHp, int playerAp);
@@ -20,7 +20,10 @@ int main() {
 	int* pixelHpPtr = &pixelHp;
 	int pixelAp = 10; //Player Attack Power variable
 	int* pixelApPtr = &pixelAp;
-
+	int heal = 4;
+	int attackBoost = 2;
+	int *healCount = &heal;
+	int *attackBoostCount = &attackBoost;
 	
 	int enemyHp = 100; //Enemy HP variable
 	int* enemyHpPtr = &enemyHp;
@@ -38,7 +41,7 @@ int main() {
 		int playerChoice;
 		int attackBoost = 0;
 		
-		printf("\n1. Attack\n2. Block\n3. UseItem\n4. Show Stats\nEnter your choice: ");
+		printf("\n1. Attack\n2. Block\n3. Use Item\n4. Show Stats\nEnter your choice: ");
 
 		scanf_s("%d", &playerChoice);
 		
@@ -72,15 +75,18 @@ int main() {
 			break;
 		case 3:
 			
-			printf("\n1. Healing Potion (+25 HP)\n2. Attack Boost (2X AP, lasts 1 turn)\nEnter your choice: ");
+			printf("\n1. Healing Potion (+25 HP). You have: %d\n2. Attack Boost (2X AP, lasts 1 turn). You Have: %d\nEnter your choice: ", *healCount, *attackBoostCount);;
 			scanf_s("%d", &index);
-			useItem(pixelInventory, index, pixelHpPtr, pixelApPtr);
+			useItem(pixelInventory, index, pixelHpPtr, pixelApPtr, healCount, attackBoostCount);
 			
 			if (index == 2) {
 				showStats(pixelHp, pixelAp);
 				continue;
 			};
 			break;
+		case 4:
+			showStats(pixelHp, pixelAp);
+			continue;
 		default:
 			continue;
 		}
@@ -108,7 +114,6 @@ int main() {
 		else {
 			continue;
 		}
-		
 		
 	}
 
@@ -155,17 +160,28 @@ char checkWinner(int playerHp, int enemyHp) {
 	}
 }
 
-const char* useItem(char* playerInventory[], int index, int* playerHp, int* playerAp) {
+const char* useItem(char* playerInventory[], int index, int* playerHp, int* playerAp, int* healCount, int* attackBoostCount) {
 
 	if (index == 1) {
-		*playerHp += 25;
+		if (*healCount > 0) {
+			*playerHp += 25;
+			*healCount -= 1;
+		}
+		else {
+			printf("\nYou have run out of heal potions!\n");
+		}
 		return playerInventory[index - 1];
 	}
 	else if (index == 2) {
+		if (*attackBoostCount <= 0) {
+			printf("\nYou do not have any more attack boost potions!\n");
+			return playerInventory[index - 1];
+		}
 		if (*playerAp == 20) {
 			printf("You already have an attack boost active!");
 			return playerInventory[index - 1];
 		}
+		*attackBoostCount -= 1;
 		*playerAp *= 2;
 		return playerInventory[index - 1];
 	}
