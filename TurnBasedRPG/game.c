@@ -131,3 +131,11 @@ void showStats(int hp, int ap) {
 	printf("---------------------------------------\n");
 };
 
+int attack(int playerAp, int* enemyHp, bool crit) {
+
+	if (crit) playerAp *= 2;
+	*enemyHp -= playerAp;
+	*enemyHp = *enemyHp < 0 ? 0 : *enemyHp;
+	return *enemyHp;
+
+};
