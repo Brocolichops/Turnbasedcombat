@@ -139,3 +139,18 @@ int attack(int playerAp, int* enemyHp, bool crit) {
 	return *enemyHp;
 
 };
+
+char checkWinner(int playerHp, int enemyHp) {
+	if (enemyHp == 0 && playerHp == 0) {
+		return 'd';
+	}
+	else if (enemyHp <= 0) {
+		return 'p';
+	}
+	else if (playerHp <= 0) {
+		return 'e';
+	}
+	else {
+		return 'c';
+	}
+}
