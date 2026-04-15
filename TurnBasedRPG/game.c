@@ -174,3 +174,21 @@ const char* useItem(char* playerInventory[], int index, int* playerHp, int* play
 	}
 
 };
+
+
+int block(int* playerHp, int enemyAp, bool dodge) {
+
+	printf("The enemy is attacking....");
+	Sleep(1000);
+	if (dodge) {
+		enemyAp = 0;
+		printf("YOU DODGED THE ATTACK! RECIEVED 0 DAMAGE");
+	}
+	else {
+		printf("UNLUCKY! THE ENEMY HIT YOU FOR 10 DAMAGE");
+	}
+	*playerHp -= enemyAp;
+	*playerHp = *playerHp < 0 ? 0 : *playerHp;
+	return *playerHp;
+
+};
